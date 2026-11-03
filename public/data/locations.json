@@ -1,0 +1,250 @@
+{
+  "volunteers": [
+    {
+      "id": "v1",
+      "name": "Rahul Sharma",
+      "city": "Delhi",
+      "lat": 28.6139,
+      "lng": 77.209,
+      "role": "Community Volunteer",
+      "image": "/images/day2/img_0222.webp",
+      "contact": "/contact?interest=Volunteer"
+    },
+    {
+      "id": "v2",
+      "name": "Sana Patil",
+      "city": "Pune",
+      "lat": 18.5204,
+      "lng": 73.8567,
+      "role": "Student Participant",
+      "image": "/images/day2/img_0214.webp",
+      "contact": "/contact?interest=Volunteer"
+    },
+    {
+      "id": "v3",
+      "name": "Kabir Sheikh",
+      "city": "Hyderabad",
+      "lat": 17.385,
+      "lng": 78.4867,
+      "role": "Student Filmmaker",
+      "image": "/images/day2/img_0211.webp",
+      "contact": "/contact?interest=Volunteer"
+    },
+    {
+      "id": "v4",
+      "name": "Meera Joseph",
+      "city": "Bengaluru",
+      "lat": 12.9716,
+      "lng": 77.5946,
+      "role": "Community Organizer",
+      "image": "/images/day2/img_0206.webp",
+      "contact": "/contact?interest=Volunteer"
+    },
+    {
+      "id": "v5",
+      "name": "Ananya Rao",
+      "city": "Madurai",
+      "lat": 9.9252,
+      "lng": 78.1198,
+      "role": "Education Volunteer",
+      "image": "/images/day2/img_0207.webp",
+      "contact": "/contact?interest=Volunteer"
+    },
+    {
+      "id": "v6",
+      "name": "Farah Khan",
+      "city": "Mumbai",
+      "lat": 19.076,
+      "lng": 72.8777,
+      "role": "Partnership Volunteer",
+      "image": "/images/day2/img_0221.webp",
+      "contact": "/contact?interest=Volunteer"
+    },
+    {
+      "id": "v7",
+      "name": "Rohan Das",
+      "city": "Ranchi",
+      "lat": 23.3441,
+      "lng": 85.3096,
+      "role": "Screening Coordinator",
+      "image": "/images/day2/img_0210.webp",
+      "contact": "/contact?interest=Volunteer"
+    },
+    {
+      "id": "v8",
+      "name": "Nisha Verma",
+      "city": "Lucknow",
+      "lat": 26.8467,
+      "lng": 80.9462,
+      "role": "Workshop Facilitator",
+      "image": "/images/day2/img_0205.webp",
+      "contact": "/contact?interest=Volunteer"
+    }
+  ],
+  "screenings": [
+    {
+      "id": "s1",
+      "title": "Open-Air Community Screening",
+      "venue": "Neighborhood Ground",
+      "address": "Pune, Maharashtra",
+      "city": "Pune",
+      "lat": 18.5204,
+      "lng": 73.8567,
+      "date": "2026-08-12",
+      "upcoming": "Documentary evening + facilitated dialogue",
+      "photo": "/images/day2/img_0204.webp"
+    },
+    {
+      "id": "s2",
+      "title": "Campus Film Literacy Night",
+      "venue": "College Auditorium",
+      "address": "Bengaluru, Karnataka",
+      "city": "Bengaluru",
+      "lat": 12.9716,
+      "lng": 77.5946,
+      "date": "2026-08-20",
+      "upcoming": "Short films + student discussion circle",
+      "photo": "/images/day2/img_0205.webp"
+    },
+    {
+      "id": "s3",
+      "title": "Village Screening Under the Trees",
+      "venue": "Community Courtyard",
+      "address": "Hassan, Karnataka",
+      "city": "Hassan",
+      "lat": 13.0033,
+      "lng": 76.1004,
+      "date": "2026-09-02",
+      "upcoming": "Family screening + local storytelling",
+      "photo": "/images/day2/img_0219.webp"
+    },
+    {
+      "id": "s4",
+      "title": "Youth Documentary Showcase",
+      "venue": "Public Library Hall",
+      "address": "Hyderabad, Telangana",
+      "city": "Hyderabad",
+      "lat": 17.385,
+      "lng": 78.4867,
+      "date": "2026-09-14",
+      "upcoming": "Student films + mentorship Q&A",
+      "photo": "/images/day2/img_0210.webp"
+    },
+    {
+      "id": "s5",
+      "title": "Evening Assembly Screening",
+      "venue": "Town Square",
+      "address": "Nashik, Maharashtra",
+      "city": "Nashik",
+      "lat": 19.9975,
+      "lng": 73.7898,
+      "date": "2026-09-28",
+      "upcoming": "Social-impact film + community dialogue",
+      "photo": "/images/day2/img_0209.webp"
+    },
+    {
+      "id": "s6",
+      "title": "Classroom Screening Series",
+      "venue": "Partner School Campus",
+      "address": "Delhi NCR",
+      "city": "Delhi",
+      "lat": 28.6139,
+      "lng": 77.209,
+      "date": "2026-10-05",
+      "upcoming": "Film literacy workshop for educators",
+      "photo": "/images/day2/img_0207.webp"
+    }
+  ],
+  "cities": [
+    {
+      "id": "c1",
+      "city": "Delhi",
+      "lat": 28.6139,
+      "lng": 77.209,
+      "volunteers": 24,
+      "screenings": 12,
+      "partners": 5
+    },
+    {
+      "id": "c2",
+      "city": "Mumbai",
+      "lat": 19.076,
+      "lng": 72.8777,
+      "volunteers": 31,
+      "screenings": 18,
+      "partners": 7
+    },
+    {
+      "id": "c3",
+      "city": "Bengaluru",
+      "lat": 12.9716,
+      "lng": 77.5946,
+      "volunteers": 28,
+      "screenings": 15,
+      "partners": 6
+    },
+    {
+      "id": "c4",
+      "city": "Pune",
+      "lat": 18.5204,
+      "lng": 73.8567,
+      "volunteers": 42,
+      "screenings": 22,
+      "partners": 8
+    },
+    {
+      "id": "c5",
+      "city": "Hyderabad",
+      "lat": 17.385,
+      "lng": 78.4867,
+      "volunteers": 19,
+      "screenings": 9,
+      "partners": 4
+    },
+    {
+      "id": "c6",
+      "city": "Lucknow",
+      "lat": 26.8467,
+      "lng": 80.9462,
+      "volunteers": 14,
+      "screenings": 7,
+      "partners": 3
+    },
+    {
+      "id": "c7",
+      "city": "Ranchi",
+      "lat": 23.3441,
+      "lng": 85.3096,
+      "volunteers": 11,
+      "screenings": 5,
+      "partners": 2
+    },
+    {
+      "id": "c8",
+      "city": "Madurai",
+      "lat": 9.9252,
+      "lng": 78.1198,
+      "volunteers": 16,
+      "screenings": 8,
+      "partners": 3
+    },
+    {
+      "id": "c9",
+      "city": "Shillong",
+      "lat": 25.5788,
+      "lng": 91.8933,
+      "volunteers": 9,
+      "screenings": 4,
+      "partners": 2
+    },
+    {
+      "id": "c10",
+      "city": "Leh",
+      "lat": 34.1526,
+      "lng": 77.5771,
+      "volunteers": 6,
+      "screenings": 3,
+      "partners": 1
+    }
+  ]
+}

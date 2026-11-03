@@ -1,0 +1,566 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  EDITOR
+  CONTENT_MANAGER
+  VOLUNTEER_MANAGER
+}
+
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+  SCHEDULED
+  ARCHIVED
+  TRASH
+}
+
+enum VolunteerStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  ACTIVE
+  INACTIVE
+}
+
+enum MembershipType {
+  STUDENT
+  VOLUNTEER
+  INDIVIDUAL
+  SUPPORTING
+  INSTITUTIONAL
+}
+
+enum MembershipStatus {
+  PENDING
+  APPROVED
+  ACTIVE
+  EXPIRED
+  REJECTED
+}
+
+enum PartnerType {
+  SCHOOL
+  COLLEGE
+  NGO
+  CSR
+  CORPORATE
+  UNIVERSITY
+}
+
+enum TestimonialType {
+  VIDEO
+  WRITTEN
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+  DOCUMENT
+  AUDIO
+}
+
+model User {
+  id            String            @id @default(cuid())
+  name          String?
+  email         String            @unique
+  emailVerified DateTime?
+  passwordHash  String?
+  image         String?
+  role          UserRole          @default(EDITOR)
+  active        Boolean           @default(true)
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  accounts      Account[]
+  sessions      Session[]
+  activityLogs  ActivityLog[]
+  revisions     ContentRevision[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model SiteSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     Json
+  updatedAt DateTime @updatedAt
+}
+
+model HeroSection {
+  id              String        @id @default(cuid())
+  kicker          String        @default("Conscious Cinema Initiative")
+  headline        Json
+  subheading      String        @db.Text
+  backgroundImage String?       @db.Text
+  backgroundVideo String?       @db.Text
+  ctaPrimary      Json?
+  ctaSecondary    Json?
+  status          ContentStatus @default(PUBLISHED)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model Stat {
+  id        String        @id @default(cuid())
+  value     Int
+  suffix    String?
+  prefix    String?
+  label     String
+  detail    String
+  sortOrder Int           @default(0)
+  status    ContentStatus @default(PUBLISHED)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model Pillar {
+  id        String        @id @default(cuid())
+  index     String
+  title     String
+  tagline   String
+  body      String        @db.Text
+  points    Json
+  image     String        @db.Text
+  sortOrder Int           @default(0)
+  status    ContentStatus @default(PUBLISHED)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model TimelineItem {
+  id        String        @id @default(cuid())
+  year      String
+  title     String
+  body      String        @db.Text
+  image     String        @db.Text
+  sortOrder Int           @default(0)
+  status    ContentStatus @default(PUBLISHED)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model CommunityStory {
+  id        String        @id @default(cuid())
+  name      String
+  role      String
+  location  String
+  quote     String        @db.Text
+  image     String?       @db.Text
+  videoUrl  String?       @db.Text
+  tags      Json          @default("[]")
+  impact    String?       @db.Text
+  featured  Boolean       @default(false)
+  status    ContentStatus @default(PUBLISHED)
+  sortOrder Int           @default(0)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model GalleryItem {
+  id        String        @id @default(cuid())
+  src       String        @db.Text
+  alt       String?
+  category  String
+  caption   String
+  span      String        @default("regular")
+  // Field / screening event date for newest-first gallery order
+  eventDate DateTime?
+  featured  Boolean       @default(false)
+  sortOrder Int           @default(0)
+  status    ContentStatus @default(PUBLISHED)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model Event {
+  id           String        @id @default(cuid())
+  title        String
+  slug         String        @unique
+  date         DateTime
+  endDate      DateTime?
+  city         String
+  type         String
+  image        String?       @db.Text
+  blurb        String        @db.Text
+  description  String?       @db.Text
+  isPast       Boolean       @default(false)
+  registration Boolean       @default(false)
+  status       ContentStatus @default(PUBLISHED)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Project {
+  id        String        @id @default(cuid())
+  title     String
+  slug      String        @unique
+  category  String
+  location  String
+  summary   String        @db.Text
+  body      String        @db.Text
+  image     String?       @db.Text
+  videoUrl  String?       @db.Text
+  impact    Json?
+  featured  Boolean       @default(false)
+  status    ContentStatus @default(PUBLISHED)
+  seoTitle  String?
+  seoDesc   String?       @db.Text
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model Partner {
+  id          String        @id @default(cuid())
+  name        String
+  type        PartnerType
+  logo        String?       @db.Text
+  description String?       @db.Text
+  website     String?
+  contact     String?
+  projects    Json          @default("[]")
+  status      ContentStatus @default(PUBLISHED)
+  sortOrder   Int           @default(0)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model Testimonial {
+  id        String          @id @default(cuid())
+  type      TestimonialType
+  name      String
+  role      String?
+  quote     String          @db.Text
+  videoUrl  String?         @db.Text
+  image     String?         @db.Text
+  featured  Boolean         @default(false)
+  approved  Boolean         @default(false)
+  status    ContentStatus   @default(DRAFT)
+  sortOrder Int             @default(0)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+}
+
+model Article {
+  id          String        @id @default(cuid())
+  title       String
+  slug        String        @unique
+  excerpt     String        @db.Text
+  body        String        @db.Text
+  category    String
+  author      String
+  image       String?       @db.Text
+  pdfUrl      String?       @db.Text
+  videoUrl    String?       @db.Text
+  readTime    Int?
+  seoTitle    String?
+  seoDesc     String?       @db.Text
+  keywords    Json          @default("[]")
+  status      ContentStatus @default(DRAFT)
+  publishedAt DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model VolunteerApplication {
+  id           String          @id @default(cuid())
+  volunteerId  String          @unique
+  name         String
+  email        String
+  phone        String
+  city         String?
+  skills       Json            @default("[]")
+  interest     String          @default("Volunteer")
+  message      String?         @db.Text
+  profilePhoto String?
+  status       VolunteerStatus @default(PENDING)
+  hours        Int             @default(0)
+  certificate  String?         @db.Text
+  notes        String?         @db.Text
+  joinedAt     DateTime        @default(now())
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+
+  @@index([email])
+  @@index([phone])
+  @@index([status])
+  @@index([createdAt])
+  @@map("volunteer_registrations")
+}
+
+model MembershipApplication {
+  id        String           @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  type      MembershipType
+  org       String?
+  message   String?          @db.Text
+  status    MembershipStatus @default(PENDING)
+  renewsAt  DateTime?
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+}
+
+model NewsletterSubscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  active    Boolean  @default(true)
+  source    String?
+  createdAt DateTime @default(now())
+}
+
+model ContactSubmission {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  role      String
+  message   String   @db.Text
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  IN_PROGRESS
+  CONVERTED
+  CLOSED
+}
+
+enum SupportPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum SupportItemStatus {
+  OPEN
+  CLOSED
+}
+
+enum SupportRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  COMPLETED
+}
+
+model Lead {
+  id           String     @id @default(cuid())
+  name         String
+  email        String
+  phone        String
+  city         String?
+  organization String?
+  interest     String
+  message      String?    @db.Text
+  sourcePage   String?
+  buttonName   String?
+  pageUrl      String?    @db.Text
+  status       LeadStatus @default(NEW)
+  remarks      String?    @db.Text
+  ipAddress    String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@index([status])
+  @@index([email])
+  @@index([createdAt])
+  @@index([interest])
+}
+
+model DonationCampaign {
+  id          String        @id @default(cuid())
+  title       String
+  slug        String        @unique
+  description String        @db.Text
+  goal        Int
+  raised      Int           @default(0)
+  supporters  Int           @default(0)
+  image       String?       @db.Text
+  status      ContentStatus @default(PUBLISHED)
+  sortOrder   Int           @default(0)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  donations   Donation[]
+}
+
+model Donation {
+  id         String           @id @default(cuid())
+  campaignId String
+  amount     Int
+  name       String?
+  email      String?
+  anonymous  Boolean          @default(false)
+  createdAt  DateTime         @default(now())
+  campaign   DonationCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+}
+
+model SupportItem {
+  id               String            @id @default(cuid())
+  title            String
+  category         String
+  description      String            @db.Text
+  quantityNeeded   Int
+  quantityReceived Int               @default(0)
+  unit             String            @default("items")
+  image            String?           @db.Text
+  priority         SupportPriority   @default(MEDIUM)
+  status           SupportItemStatus @default(OPEN)
+  sortOrder        Int               @default(0)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  requests         SupportRequest[]
+
+  @@index([status])
+  @@index([category])
+  @@index([priority])
+  @@index([createdAt])
+}
+
+model SupportRequest {
+  id                String               @id @default(cuid())
+  supportItemId     String
+  fullName          String
+  email             String
+  phone             String
+  address           String               @db.Text
+  city              String
+  state             String
+  country           String               @default("India")
+  pincode           String
+  message           String?              @db.Text
+  quantityToDonate  Int
+  status            SupportRequestStatus @default(PENDING)
+  adminNotes        String?              @db.Text
+  ipAddress         String?
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+  supportItem       SupportItem          @relation(fields: [supportItemId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+  @@index([supportItemId])
+  @@index([createdAt])
+  @@index([email])
+}
+
+model TransparencyRecord {
+  id        String   @id @default(cuid())
+  category  String
+  title     String
+  value     String
+  detail    String?  @db.Text
+  document  String?  @db.Text
+  year      Int?
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model MediaAsset {
+  id        String    @id @default(cuid())
+  filename  String
+  url       String    @db.Text
+  type      MediaType
+  folder    String    @default("general")
+  alt       String?
+  size      Int?
+  mimeType  String?
+  width     Int?
+  height    Int?
+  createdAt DateTime  @default(now())
+}
+
+model PageContent {
+  id        String        @id @default(cuid())
+  page      String        @unique
+  sections  Json
+  seo       Json?
+  status    ContentStatus @default(PUBLISHED)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model ActivityLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  action    String
+  entity    String
+  entityId  String?
+  details   Json?
+  createdAt DateTime @default(now())
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+}
+
+model ContentRevision {
+  id        String   @id @default(cuid())
+  userId    String?
+  entity    String
+  entityId  String
+  data      Json
+  createdAt DateTime @default(now())
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+}
+
+model PageView {
+  id        String   @id @default(cuid())
+  path      String
+  referrer  String?  @db.Text
+  userAgent String?  @db.Text
+  createdAt DateTime @default(now())
+
+  @@index([path])
+  @@index([createdAt])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  expires   DateTime
+  createdAt DateTime @default(now())
+
+  @@index([email])
+}
